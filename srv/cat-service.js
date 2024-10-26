@@ -34,6 +34,25 @@ const axios = require('axios');
 class CatalogService extends cds.ApplicationService {
     init(){
         const { API2022 } = this.entities;
+
+         // Adding CORS Middleware
+         cds.on('bootstrap', app => {
+            app.use((req, res, next) => {
+                const origin = req.headers.origin;
+                if (process.env.NODE_ENV !== 'production' && origin) {
+                    res.setHeader('Access-Control-Allow-Origin', origin);
+                    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, x-csrf-token');
+                    res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
+                    if (req.method === 'OPTIONS') {
+                        return res.status(204).end();
+                    }
+                }
+                next();
+            });
+        });
+
+
+        
         this.on('READ', API2022, async () => {
             try {
                 const response = await axios.get('https://raw.githubusercontent.com/SAP/abap-atc-cr-cv-s4hc/main/src/objectReleaseInfo_PCE2023_1.json');
