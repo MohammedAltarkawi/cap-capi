@@ -39,7 +39,9 @@ class CatalogService extends cds.ApplicationService {
          cds.on('bootstrap', app => {
             app.use((req, res, next) => {
                 const origin = req.headers.origin;
+                console.log(process.env.NODE_ENV);
                 if (process.env.NODE_ENV !== 'production' && origin) {
+                    console.log('production production production production');
                     res.setHeader('Access-Control-Allow-Origin', origin);
                     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, x-csrf-token');
                     res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
